@@ -8,15 +8,17 @@ find_package(SFML 2.5 REQUIRED graphics window system)
 set(SOURCES
     src/View/View.cpp
     src/Entities/Player/Player.cpp
-    src/Utils/CollisionManager/CollisionManager.cpp
+    src/Utils/CollisionMediator/CollisionMediator.cpp
     src/World/World.cpp
     src/Utils/Animation/Animation.cpp
-    src/Map/Tiles/Fire/Fire.cpp
-    src/Map/Tiles/Brick/Brick.cpp
-    src/Map/Tiles/Coin/Coin.cpp
-    src/Map/Tiles/Brick/BrickFactory/BrickFactory.cpp
-    src/Map/Tiles/Tile.cpp
-    src/Map/Map.cpp
+    src/World/LevelController/LevelController.cpp
+    src/World/Map/Tiles/Fire/Fire.cpp
+    src/World/Map/Tiles/Door/Door.cpp
+    src/World/Map/Tiles/Brick/Brick.cpp
+    src/World/Map/Tiles/Coin/Coin.cpp
+    src/World/Map/TileFactories/BrickFactory/BrickFactory.cpp
+    src/World/Map/Tiles/Tile.cpp
+    src/World/Map/Map.cpp
     src/Settings/Settings.cpp
     src/main.cpp
 )

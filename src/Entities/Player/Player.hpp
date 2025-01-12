@@ -7,10 +7,10 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 
-class Tile;
-
 class Player {
 private:
+  const float WORLD_LIMIT_LEFT = 0;
+  const float WORLD_LIMIT_RIGHT = 22 * 12;
   const float JUMP_FORCE = -300.f;
   const float JUMP_COOLDOWN = 0.05f;
   const float MOVEMENT_SPEED = 100.0f;
@@ -19,7 +19,7 @@ private:
   const float SCALE_Y = 1.0f;
 
   inline static sf::Sprite sprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(36, 0, 12, 10));
+      Settings::getInstance()->getTexture(), sf::IntRect(36, 0, 12, 12));
 
   float jumpCooldownPassed;
 
@@ -33,6 +33,7 @@ private:
   int score;
   float verticalVelocity;
   bool isJumping;
+  int keys;
 
   void moveRight(float _deltaTime);
   void moveLeft(float _deltaTime);
@@ -40,10 +41,17 @@ private:
 
 public:
   Player(int x, int y);
-  const HitBoxSprite &getSprite() const;
+  HitBoxSprite &getHitBoxSprite();
+
+  void blockLeftMovement(float x);
+  void blockRightMovement(float x);
+  void blockDownMovement(float y);
+  void blockUpMovement(float y);
+
   void Update(float _deltaTime);
-  void handleCollision(Tile &tile);
   void setForce(float _force);
   void increaseScore(int _points);
-  void die();
+  void takeDamage();
+  void climb();
+  bool goDownSlab(); 
 };

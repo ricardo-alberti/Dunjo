@@ -28,8 +28,8 @@ public:
 
     origin = {x, y};
 
-    box.left = position.x - x + offset.x;
-    box.top = position.y - y + offset.y;
+    box.left = position.x - origin.x + offset.x;
+    box.top = position.y - origin.y + offset.y;
   }
 
   void move(float offsetX, float offsetY) {
@@ -47,7 +47,12 @@ public:
     return box.intersects(other.box);
   }
 
-  sf::FloatRect getRect() const { return box; }
+  const sf::FloatRect getRect() const { return box; }
+  float getHeight() { return box.height; }
+  float getLeft() {
+    sf::Vector2f position = getPosition();
+    return position.x;
+  }
 
   void drawHitBox(sf::RenderWindow &window) const {
     sf::RectangleShape debugBox;

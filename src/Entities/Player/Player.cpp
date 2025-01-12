@@ -1,5 +1,4 @@
 #include "Player.hpp"
-#include "../../Map/Tiles/Tile.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -8,8 +7,9 @@
 Player::Player(int _x, int _y)
     : verticalVelocity(0.0f), isJumping(true), defeated(false) {
   hitBoxSprite =
-      std::make_shared<HitBoxSprite>(sprite, _x, _y, 8, 8, sf::Vector2f(3, 2));
+      std::make_shared<HitBoxSprite>(sprite, _x, _y, 8, 10, sf::Vector2f(3, 0));
   hitBoxSprite->setOrigin(6, 0);
+  hitBoxSprite->setPosition(_x, _y);
 
   idleAnimation = std::make_unique<Animation>(hitBoxSprite, 36, 0, 0, 1);
   jumpAnimation = std::make_unique<Animation>(hitBoxSprite, 48, 0, 0.1f, 1);
@@ -17,7 +17,7 @@ Player::Player(int _x, int _y)
   deadAnimation = std::make_unique<Animation>(hitBoxSprite, 84, 0, 0.2f, 1);
 }
 
-const HitBoxSprite &Player::getSprite() const { return *hitBoxSprite; }
+HitBoxSprite &Player::getHitBoxSprite() { return *hitBoxSprite; }
 
 void Player::Update(float _deltaTime) {
   // gravidade
@@ -55,11 +55,17 @@ void Player::Update(float _deltaTime) {
 }
 
 void Player::moveRight(float _deltaTime) {
+  if (hitBoxSprite->getPosition().x >= WORLD_LIMIT_RIGHT)
+    return;
+
   hitBoxSprite->setScale(SCALE_X, SCALE_Y);
   hitBoxSprite->move(MOVEMENT_SPEED * _deltaTime, 0);
 }
 
 void Player::moveLeft(float _deltaTime) {
+  if (hitBoxSprite->getPosition().x <= WORLD_LIMIT_LEFT)
+    return;
+
   hitBoxSprite->setScale(-SCALE_X, SCALE_Y);
   hitBoxSprite->move(-MOVEMENT_SPEED * _deltaTime, 0);
 }
@@ -76,7 +82,17 @@ void Player::jump(float _deltaTime) {
 
 void Player::increaseScore(int _points) { score += _points; }
 
-void Player::die() {
+void Player::climb() { setForce(JUMP_FORCE); }
+
+bool Player::goDownSlab() {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    return true;
+  }
+
+  return false;
+}
+
+void Player::takeDamage() {
   if (defeated)
     return;
 
@@ -86,34 +102,20 @@ void Player::die() {
 
 void Player::setForce(float _force) { verticalVelocity = _force; }
 
-void Player::handleCollision(Tile &tile) {
-  const sf::FloatRect playerBounds = hitBoxSprite->getGlobalBounds();
-  const sf::FloatRect tileBounds = tile.getSprite().getGlobalBounds();
+void Player::blockUpMovement(float y) {
+  hitBoxSprite->setPosition(hitBoxSprite->getPosition().x, y);
+}
+void Player::blockLeftMovement(float x) {
+  hitBoxSprite->setPosition(x, hitBoxSprite->getPosition().y);
+}
+void Player::blockRightMovement(float x) {
+  hitBoxSprite->setPosition(x, hitBoxSprite->getPosition().y);
+}
+void Player::blockDownMovement(float y) {
+  if (verticalVelocity < 0)
+    return;
 
-  if (playerBounds.top + playerBounds.height - 7.0f <= tileBounds.top) {
-    if (verticalVelocity < 0)
-      return;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && tile.climbable) {
-      hitBoxSprite->move(0, 1.0f);
-      tile.collidable = false;
-      return;
-    }
-
-    hitBoxSprite->setPosition(hitBoxSprite->getPosition().x,
-                              tileBounds.top - playerBounds.height + 2.0f);
-    verticalVelocity = 0;
-    isJumping = false;
-  } else if (tileBounds.top + tileBounds.height - 7.0f <= playerBounds.top) {
-    hitBoxSprite->setPosition(hitBoxSprite->getPosition().x,
-                              tileBounds.top + tileBounds.height - 2.0f);
-  } else if (playerBounds.left < tileBounds.left) {
-    hitBoxSprite->setPosition(tileBounds.left - playerBounds.width / 2 + 3.0f,
-                              hitBoxSprite->getPosition().y);
-  } else if (playerBounds.left + playerBounds.width >
-             tileBounds.left + tileBounds.width) {
-    hitBoxSprite->setPosition(tileBounds.left + playerBounds.width / 2 - 3.0f +
-                                  tileBounds.width,
-                              hitBoxSprite->getPosition().y);
-  }
+  verticalVelocity = 0;
+  hitBoxSprite->setPosition(hitBoxSprite->getPosition().x, y);
+  isJumping = false;
 }
