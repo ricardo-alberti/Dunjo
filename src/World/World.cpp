@@ -1,24 +1,24 @@
 #include "World.hpp"
-#include "../Utils/CollisionManager/CollisionManager.hpp"
-#include "../Map/Map.hpp"
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <memory>
 
-World::World(View &_view, Player &_player) : view(_view), player(_player) {}
+World::World(View &_view, Player &_player, LevelController &_levelController)
+    : view(_view), player(_player), levelController(_levelController) {
+  collisionMediator = std::make_unique<CollisionMediator>();
+}
 
 void World::display() {
-  float deltaTime = 0.0f; // tempo acumulado entre frames
-  Map map = Map();
-  map.loadTiles();
+  levelController.getCurrentLevel()->loadTiles();
 
   sf::Clock clock;
 
   sf::Music music;
-  music.openFromFile("../assets/music/nice_music2.mp3");
+  music.openFromFile("../assets/music/nice_music.mp3");
   music.setLoop(true);
-  music.play();
+  // music.play();
 
   while (view.isOpen()) {
     deltaTime = clock.restart().asSeconds();
@@ -31,16 +31,18 @@ void World::display() {
 
     view.clear();
 
-    map.draw(view.getWindow());
-    view.getWindow().draw(player.getSprite());
-    //player.getSprite().drawHitBox(view.getWindow());
+    collisionMediator->checkCollisions(
+        player, levelController.getCurrentLevel()->getTiles());
 
-    player.Update(deltaTime);
-    map.Update(deltaTime);
-    CollisionManager::checkCollisions(player, map.getTiles());
+    levelController.getCurrentLevel()->Update(deltaTime);
+    levelController.getCurrentLevel()->draw(view.getWindow());
 
     view.getView().setCenter(132, 100);
     view.getWindow().setView(view.getView());
+
+    //player.getHitBoxSprite().drawHitBox(view.getWindow());
+    view.getWindow().draw(player.getHitBoxSprite());
+    player.Update(deltaTime);
 
     view.display();
   }
