@@ -5,25 +5,13 @@
 void CollisionMediator::checkCollisions(
     Player &player, const std::vector<std::shared_ptr<Tile>> &tiles) {
   for (const auto &tile : tiles) {
-    if (tile->getHitBoxSprite().intersects(player.getHitBoxSprite())) {
-      if (tile->isClimbable())
-        player.climb();
+    if (!tile->getHitBoxSprite().intersects(player.getHitBoxSprite()))
+      continue;
 
-      if (tile->isDamageable()) {
-        player.takeDamage();
-      }
+    if (tile->isCollidable())
+      handleDirectionalCollisions(*tile, player);
 
-      if (tile->slab) {
-        handleSlabCollisions(*tile, player);
-      }
-
-      // if (tile->isDamageable())
-      if (tile->isCollidable()) {
-        handleDirectionalCollisions(*tile, player);
-      }
-
-      tile->handleCollision();
-    }
+    tile->handleCollision(player);
   }
 }
 
@@ -55,19 +43,4 @@ void CollisionMediator::handleDirectionalCollisions(Tile &tile,
   }
 }
 
-void CollisionMediator::handleSlabCollisions(Tile &tile, Player &player) {
-  sf::FloatRect playerBounds = player.getHitBoxSprite().getRect();
-  sf::FloatRect tileBounds = tile.getHitBoxSprite().getRect();
-
-  if (playerBounds.top + playerBounds.height - 0.1f <= tileBounds.top) {
-    tile.onPlayerTop();
-  }
-
-  else {
-    tile.onPlayerBottom();
-  }
-
-  if (player.goDownSlab()) {
-    tile.onPlayerBottom();
-  }
-}
+void CollisionMediator::handleSlabCollisions(Tile &tile, Player &player) {}

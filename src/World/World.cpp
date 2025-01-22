@@ -1,6 +1,7 @@
 #include "World.hpp"
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <memory>
@@ -11,7 +12,7 @@ World::World(View &_view, Player &_player, LevelController &_levelController)
 }
 
 void World::display() {
-  levelController.getCurrentLevel()->loadTiles();
+  levelController.goNextLevel(player);
 
   sf::Clock clock;
 

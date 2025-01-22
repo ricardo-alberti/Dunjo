@@ -15,5 +15,5 @@ public:
              std::make_shared<HitBoxSprite>(doorSprite, x, y, 12.0f, 12.0f)) {};
   ~Door() = default;
 
-  const void handleCollision() override;
+  const void handleCollision(Player &player) override;
 };

@@ -1,7 +1,7 @@
 #include "World/World.hpp"
 
 int main() {
-  Player player = Player(150, 20);
+  Player player = Player();
   View view = View();
   LevelController levelController = LevelController();
 

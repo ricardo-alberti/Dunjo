@@ -6,7 +6,7 @@
 
 class LevelController {
 private:
-  static inline int currentLevel = 1;
+  static inline int currentLevel = 0;
   static std::map<int, std::shared_ptr<Map>> levelOrder;
 
 public:
@@ -14,6 +14,6 @@ public:
   const std::shared_ptr<Map> getCurrentLevel();
 
   void setLevelOrder();
-  static void goNextLevel();
-  static void goPreviousLevel();
+  static void goNextLevel(Player &player);
+  static void goPreviousLevel(Player &player);
 };

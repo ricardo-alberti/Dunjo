@@ -11,10 +11,8 @@ private:
 
 public:
   Ladder(int x, int y)
-      : Tile(x, y, std::make_shared<HitBoxSprite>(ladderSprite, x, y)) {
-    climbable = true;
-  }
+      : Tile(x, y, std::make_shared<HitBoxSprite>(ladderSprite, x, y)) {}
   ~Ladder() = default;
 
-  const void handleCollision() { return; }
+  const void handleCollision(Player &player) override { player.climb(); }
 };

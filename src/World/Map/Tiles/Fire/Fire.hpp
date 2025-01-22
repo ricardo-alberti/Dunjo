@@ -16,5 +16,5 @@ public:
   Fire(int x, int y, sf::Sprite sprite);
   ~Fire();
   void Update(float _deltaTime) override;
-  const void handleCollision() override;
+  const void handleCollision(Player &player) override;
 };

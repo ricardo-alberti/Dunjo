@@ -10,7 +10,7 @@ private:
   sf::View view;
 
 public:
-  View(int _x = 1366, int _y = 768, const std::string &title = "SFML");
+  View(int _x = 1366, int _y = 768, const std::string &title = "Dunjo");
   void clear();
   void display();
   bool isOpen() const;

@@ -12,7 +12,6 @@ Fire::Fire(int _x, int _y, sf::Sprite _sprite)
   std::uniform_real_distribution<float> distribution(0.52f, 1.0f);
 
   frameTime = distribution(generator);
-  damageable = true;
 }
 Fire::~Fire() = default;
 
@@ -26,4 +25,4 @@ void Fire::Update(float _deltaTime) {
   }
 }
 
-const void Fire::handleCollision() { return; }
+const void Fire::handleCollision(Player &player) { player.takeDamage(); }

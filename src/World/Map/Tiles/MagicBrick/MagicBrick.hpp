@@ -10,5 +10,12 @@ private:
 public:
   MagicBrick(int x, int y) : Brick(x, y, magicSprite) { collidable = false; }
 
+  const void Activate() {
+    hitBoxSprite->setTexture(Settings::getInstance()->getTexture());
+    hitBoxSprite->setTextureRect(sf::IntRect(60, 24, 12, 12));
+    collidable = true;
+    return;
+  }
+
   ~MagicBrick() = default;
 };

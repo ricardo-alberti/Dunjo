@@ -14,7 +14,9 @@ public:
       : Tile(_x, _y, std::make_shared<HitBoxSprite>(sprite, _x, _y)) {}
 
   const HitBoxSprite &getSprite() const { return *hitBoxSprite; }
-  const void handleCollision() {
-      return;
+  const void handleCollision(Player &player) override
+  {
+      hitBoxSprite->setPosition(0, -1000);
+      player.getKey();
   }
 };

@@ -5,42 +5,59 @@
 #include "../../Utils/HitBoxSprite/HitBoxSprite.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <functional>
 #include <memory>
+
+using func = std::function<void(float)>;
+enum PlayerState { Idle, Running, Jumping, Climbing, Dead };
 
 class Player {
 private:
-  const float WORLD_LIMIT_LEFT = 0;
-  const float WORLD_LIMIT_RIGHT = 22 * 12;
-  const float JUMP_FORCE = -300.f;
-  const float JUMP_COOLDOWN = 0.05f;
-  const float MOVEMENT_SPEED = 100.0f;
-  const float GRAVITY = 1900.0f;
-  const float SCALE_X = 1.0f;
-  const float SCALE_Y = 1.0f;
-
   inline static sf::Sprite sprite = sf::Sprite(
       Settings::getInstance()->getTexture(), sf::IntRect(36, 0, 12, 12));
 
-  float jumpCooldownPassed;
+  std::shared_ptr<HitBoxSprite> hitBoxSprite =
+      std::make_shared<HitBoxSprite>(sprite, 0, 0, 8, 10, sf::Vector2f(3, 0));
 
-  std::shared_ptr<HitBoxSprite> hitBoxSprite;
-  std::unique_ptr<Animation> idleAnimation;
-  std::unique_ptr<Animation> jumpAnimation;
-  std::unique_ptr<Animation> runAnimation;
-  std::unique_ptr<Animation> deadAnimation;
-
-  bool defeated;
+  PlayerState playerState = PlayerState::Idle;
   int score;
+  bool onGround = false;
   float verticalVelocity;
-  bool isJumping;
+  float horizontalVelocity;
+  float jumpCooldownPassed;
   int keys;
+
+  std::unique_ptr<Animation> idleAnimation =
+      std::make_unique<Animation>(hitBoxSprite, 36, 0, 0, 1);
+  std::unique_ptr<Animation> jumpAnimation =
+      std::make_unique<Animation>(hitBoxSprite, 48, 0, 0.1f, 1);
+  std::unique_ptr<Animation> runAnimation =
+      std::make_unique<Animation>(hitBoxSprite, 36, 0, 0.1f, 4);
+  std::unique_ptr<Animation> deadAnimation =
+      std::make_unique<Animation>(hitBoxSprite, 84, 0, 0.2f, 1);
+
+  std::unordered_map<PlayerState, func> animations{
+      {PlayerState::Idle,
+       [this](float _deltaTime) { idleAnimation->update(_deltaTime); }},
+      {PlayerState::Running,
+       [this](float _deltaTime) { runAnimation->update(_deltaTime); }},
+      {PlayerState::Dead,
+       [this](float _deltaTime) { deadAnimation->update(_deltaTime); }},
+      {PlayerState::Jumping,
+       [this](float _deltaTime) { jumpAnimation->update(_deltaTime); }}
+  };
 
   void moveRight(float _deltaTime);
   void moveLeft(float _deltaTime);
   void jump(float _deltaTime);
+  void blockPlayerWorldLimit();
+  void setForce(float _horizontalForce, float _verticalForce);
+  void resetVerticalVelocity();
+  void resetHorizontalVelocity();
 
 public:
-  Player(int x, int y);
+  Player();
   HitBoxSprite &getHitBoxSprite();
 
   void blockLeftMovement(float x);
@@ -49,9 +66,10 @@ public:
   void blockUpMovement(float y);
 
   void Update(float _deltaTime);
-  void setForce(float _force);
+  bool useKey();
+  void getKey();
   void increaseScore(int _points);
   void takeDamage();
   void climb();
-  bool goDownSlab(); 
+  bool goDownSlab();
 };

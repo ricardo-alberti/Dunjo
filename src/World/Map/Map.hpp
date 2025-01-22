@@ -2,6 +2,8 @@
 
 #include "TileAspects/AnimatedTile.hpp"
 #include "TileFactories/CentralTileFactory/CentralTileFactory.hpp"
+#include "Tiles/Computer/Computer.hpp"
+#include "Tiles/MagicBrick/MagicBrick.hpp"
 #include "Tiles/Tile.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -16,6 +18,11 @@ protected:
   std::vector<std::vector<int>> tileMap;
   std::vector<std::shared_ptr<Tile>> tiles;
   std::vector<std::shared_ptr<AnimatedTile>> animatedTiles;
+
+  std::shared_ptr<class Computer> levelComputer;
+  std::vector<std::shared_ptr<class MagicBrick>> magicBricks;
+
+  sf::Vector2f spawnPoint = {0, 0};
   CentralTileFactory factory;
 
 public:
@@ -24,4 +31,5 @@ public:
   void draw(sf::RenderWindow &window);
   void Update(float deltaTime);
   const std::vector<std::shared_ptr<Tile>> &getTiles() const;
+  const sf::Vector2f &getSpawnPoint() const;
 };

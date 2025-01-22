@@ -17,5 +17,5 @@ public:
   ~Coin();
 
   void Update(float deltaTime) override;
-  const void handleCollision() override;
+  const void handleCollision(Player &player) override;
 };

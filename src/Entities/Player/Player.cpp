@@ -2,72 +2,76 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include <memory>
 
-Player::Player(int _x, int _y)
-    : verticalVelocity(0.0f), isJumping(true), defeated(false) {
-  hitBoxSprite =
-      std::make_shared<HitBoxSprite>(sprite, _x, _y, 8, 10, sf::Vector2f(3, 0));
-  hitBoxSprite->setOrigin(6, 0);
-  hitBoxSprite->setPosition(_x, _y);
+constexpr float WORLD_LIMIT_LEFT = 0;
+constexpr float WORLD_LIMIT_RIGHT = 22 * 12;
+constexpr float IDLE_SPEED = 13.3f;
+constexpr float JUMP_FORCE = -300.f;
+constexpr float JUMP_COOLDOWN = 0.07f;
+constexpr float MOVEMENT_SPEED = 800.0f;
+constexpr float CLIMB_SPEED = -250.0f;
+constexpr float HORIZONTAL_RESISTANCE = 8.0f;
+constexpr float GRAVITY = 1900.0f;
+constexpr float SCALE_X = 1.0f;
+constexpr float SCALE_Y = 1.0f;
 
-  idleAnimation = std::make_unique<Animation>(hitBoxSprite, 36, 0, 0, 1);
-  jumpAnimation = std::make_unique<Animation>(hitBoxSprite, 48, 0, 0.1f, 1);
-  runAnimation = std::make_unique<Animation>(hitBoxSprite, 36, 0, 0.1f, 4);
-  deadAnimation = std::make_unique<Animation>(hitBoxSprite, 84, 0, 0.2f, 1);
-}
+Player::Player() { hitBoxSprite->setOrigin(6, 0); }
 
 HitBoxSprite &Player::getHitBoxSprite() { return *hitBoxSprite; }
+void Player::resetVerticalVelocity() { verticalVelocity = 0; }
+void Player::resetHorizontalVelocity() { horizontalVelocity = 0; }
+void Player::increaseScore(int _points) { score += _points; }
+void Player::climb() { setForce(horizontalVelocity, CLIMB_SPEED); }
+
+void Player::blockPlayerWorldLimit() {
+  if (hitBoxSprite->getPosition().x >= WORLD_LIMIT_RIGHT) {
+    hitBoxSprite->setPosition(WORLD_LIMIT_RIGHT, hitBoxSprite->getPosition().y);
+  } else if (hitBoxSprite->getPosition().x <= WORLD_LIMIT_LEFT) {
+    hitBoxSprite->setPosition(WORLD_LIMIT_LEFT, hitBoxSprite->getPosition().y);
+  }
+}
 
 void Player::Update(float _deltaTime) {
-  // gravidade
-  hitBoxSprite->move(0, verticalVelocity * _deltaTime);
-  verticalVelocity += GRAVITY * _deltaTime;
+  animations[playerState](_deltaTime);
 
-  // derrotado
-  if (defeated) {
-    deadAnimation->update(_deltaTime);
+  blockPlayerWorldLimit();
+
+  hitBoxSprite->move(horizontalVelocity * _deltaTime,
+                     verticalVelocity * _deltaTime);
+  verticalVelocity += GRAVITY * _deltaTime;
+  horizontalVelocity -= horizontalVelocity * HORIZONTAL_RESISTANCE * _deltaTime;
+
+  if (playerState == PlayerState::Dead)
     return;
-  }
+
+  // set state if idle
+  if (horizontalVelocity <= IDLE_SPEED && horizontalVelocity >= -IDLE_SPEED &&
+      onGround)
+    playerState = PlayerState::Idle;
 
   // input
-  bool isMoving = false;
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     moveLeft(_deltaTime);
-    isMoving = true;
-  } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     moveRight(_deltaTime);
-    isMoving = true;
-  }
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !isJumping) {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && onGround)
     jump(_deltaTime);
-  }
-
-  if (isJumping) {
-    jumpAnimation->update(_deltaTime);
-  } else if (!isMoving) {
-    idleAnimation->update(_deltaTime);
-  } else {
-    runAnimation->update(_deltaTime);
-  }
 }
 
 void Player::moveRight(float _deltaTime) {
-  if (hitBoxSprite->getPosition().x >= WORLD_LIMIT_RIGHT)
-    return;
+  if (onGround)
+    playerState = PlayerState::Running;
 
+  horizontalVelocity += MOVEMENT_SPEED * _deltaTime;
   hitBoxSprite->setScale(SCALE_X, SCALE_Y);
-  hitBoxSprite->move(MOVEMENT_SPEED * _deltaTime, 0);
 }
 
 void Player::moveLeft(float _deltaTime) {
-  if (hitBoxSprite->getPosition().x <= WORLD_LIMIT_LEFT)
-    return;
+  if (onGround)
+    playerState = PlayerState::Running;
 
+  horizontalVelocity -= MOVEMENT_SPEED * _deltaTime;
   hitBoxSprite->setScale(-SCALE_X, SCALE_Y);
-  hitBoxSprite->move(-MOVEMENT_SPEED * _deltaTime, 0);
 }
 
 void Player::jump(float _deltaTime) {
@@ -75,32 +79,42 @@ void Player::jump(float _deltaTime) {
 
   if (jumpCooldownPassed >= JUMP_COOLDOWN) {
     verticalVelocity = JUMP_FORCE;
-    isJumping = true;
+    playerState = PlayerState::Jumping;
     jumpCooldownPassed = 0.0f;
+    onGround = false;
   }
 }
 
-void Player::increaseScore(int _points) { score += _points; }
-
-void Player::climb() { setForce(JUMP_FORCE); }
-
 bool Player::goDownSlab() {
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    return true;
+
+  return false;
+}
+
+bool Player::useKey() {
+  if (keys > 0) {
+    keys--;
     return true;
   }
 
   return false;
 }
 
+void Player::getKey() { keys++; }
+
 void Player::takeDamage() {
-  if (defeated)
+  if (playerState == PlayerState::Dead)
     return;
 
-  setForce(JUMP_FORCE);
-  defeated = true;
+  setForce(-horizontalVelocity, JUMP_FORCE);
+  playerState = PlayerState::Dead;
 }
 
-void Player::setForce(float _force) { verticalVelocity = _force; }
+void Player::setForce(float _horizontalForce, float _verticalForce) {
+  verticalVelocity = _verticalForce;
+  horizontalVelocity = _horizontalForce;
+}
 
 void Player::blockUpMovement(float y) {
   hitBoxSprite->setPosition(hitBoxSprite->getPosition().x, y);
@@ -115,7 +129,7 @@ void Player::blockDownMovement(float y) {
   if (verticalVelocity < 0)
     return;
 
-  verticalVelocity = 0;
+  resetVerticalVelocity();
   hitBoxSprite->setPosition(hitBoxSprite->getPosition().x, y);
-  isJumping = false;
+  onGround = true;
 }

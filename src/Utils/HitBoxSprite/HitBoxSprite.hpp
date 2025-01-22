@@ -13,7 +13,7 @@ private:
   sf::Vector2f offset;
 
 public:
-  HitBoxSprite(sf::Sprite &sprite, float x, float y, float width = 12,
+  HitBoxSprite(sf::Sprite &sprite, float x = 0, float y = 0, float width = 12,
                float height = 12, sf::Vector2f offset = {0, 0})
       : sf::Sprite(sprite), box(x, y, width, height), offset(offset) {}
 
