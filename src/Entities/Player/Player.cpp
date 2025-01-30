@@ -5,7 +5,7 @@
 
 constexpr float WORLD_LIMIT_LEFT = 0;
 constexpr float WORLD_LIMIT_RIGHT = 22 * 12;
-constexpr float IDLE_SPEED = 13.3f;
+constexpr float IDLE_SPEED = 30.0;
 constexpr float JUMP_FORCE = -300.f;
 constexpr float JUMP_COOLDOWN = 0.07f;
 constexpr float MOVEMENT_SPEED = 800.0f;
@@ -31,8 +31,21 @@ void Player::blockPlayerWorldLimit() {
   }
 }
 
+void Player::resetToCheckPoint(sf::Vector2f checkPoint) {
+  resetVerticalVelocity();
+  resetHorizontalVelocity();
+
+  hitBoxSprite->setPosition(checkPoint.x, checkPoint.y);
+  playerState = PlayerState::Idle;
+}
+
 void Player::Update(float _deltaTime) {
-  animations[playerState](_deltaTime);
+  if (lastState != playerState) {
+    lastState = playerState;
+    animations.at(playerState).reset();
+  }
+
+  animations.at(playerState).update(_deltaTime);
 
   blockPlayerWorldLimit();
 

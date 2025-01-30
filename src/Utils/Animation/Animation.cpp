@@ -21,3 +21,8 @@ const void Animation::update(float deltaTime) {
     sprite->setTextureRect(frames[currentFrame]);
   }
 }
+
+const void Animation::reset()
+{
+    currentFrame = 0;
+}

@@ -5,6 +5,7 @@
 #include "../../Utils/HitBoxSprite/HitBoxSprite.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <functional>
 #include <memory>
@@ -21,6 +22,7 @@ private:
       std::make_shared<HitBoxSprite>(sprite, 0, 0, 8, 10, sf::Vector2f(3, 0));
 
   PlayerState playerState = PlayerState::Idle;
+  PlayerState lastState = PlayerState::Idle;
   int score;
   bool onGround = false;
   float verticalVelocity;
@@ -28,25 +30,11 @@ private:
   float jumpCooldownPassed;
   int keys;
 
-  std::unique_ptr<Animation> idleAnimation =
-      std::make_unique<Animation>(hitBoxSprite, 36, 0, 0, 1);
-  std::unique_ptr<Animation> jumpAnimation =
-      std::make_unique<Animation>(hitBoxSprite, 48, 0, 0.1f, 1);
-  std::unique_ptr<Animation> runAnimation =
-      std::make_unique<Animation>(hitBoxSprite, 36, 0, 0.1f, 4);
-  std::unique_ptr<Animation> deadAnimation =
-      std::make_unique<Animation>(hitBoxSprite, 84, 0, 0.2f, 1);
-
-  std::unordered_map<PlayerState, func> animations{
-      {PlayerState::Idle,
-       [this](float _deltaTime) { idleAnimation->update(_deltaTime); }},
-      {PlayerState::Running,
-       [this](float _deltaTime) { runAnimation->update(_deltaTime); }},
-      {PlayerState::Dead,
-       [this](float _deltaTime) { deadAnimation->update(_deltaTime); }},
-      {PlayerState::Jumping,
-       [this](float _deltaTime) { jumpAnimation->update(_deltaTime); }}
-  };
+  std::unordered_map<PlayerState, Animation> animations{
+      {PlayerState::Idle, Animation(hitBoxSprite, 36, 0, 0, 1)},
+      {PlayerState::Jumping, Animation(hitBoxSprite, 48, 0, 0.1f, 1)},
+      {PlayerState::Running, Animation(hitBoxSprite, 36, 0, 0.1f, 4)},
+      {PlayerState::Dead, Animation(hitBoxSprite, 84, 0, 0.2f, 1)}};
 
   void moveRight(float _deltaTime);
   void moveLeft(float _deltaTime);
@@ -65,6 +53,7 @@ public:
   void blockDownMovement(float y);
   void blockUpMovement(float y);
 
+  void resetToCheckPoint(sf::Vector2f checkPoint);
   void Update(float _deltaTime);
   bool useKey();
   void getKey();

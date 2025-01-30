@@ -1,4 +1,5 @@
 #include "Fire.hpp"
+#include "../../../LevelController/LevelController.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <random>
@@ -25,4 +26,7 @@ void Fire::Update(float _deltaTime) {
   }
 }
 
-const void Fire::handleCollision(Player &player) { player.takeDamage(); }
+const void Fire::handleCollision(Player &player) {
+  player.takeDamage();
+  LevelController::getInstance()->reset(player);
+}

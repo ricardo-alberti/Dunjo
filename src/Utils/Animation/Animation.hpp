@@ -21,4 +21,5 @@ public:
   Animation(std::shared_ptr<HitBoxSprite> sprite, int initialFrame_X,
             int initialFrame_Y, float frameTime, int numFrames);
   const void update(float deltaTime);
+  const void reset();
 };

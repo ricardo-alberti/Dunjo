@@ -12,7 +12,7 @@ World::World(View &_view, Player &_player, LevelController &_levelController)
 }
 
 void World::display() {
-  levelController.goNextLevel(player);
+  LevelController::getInstance()->goNextLevel(player);
 
   sf::Clock clock;
 
@@ -33,15 +33,15 @@ void World::display() {
     view.clear();
 
     collisionMediator->checkCollisions(
-        player, levelController.getCurrentLevel()->getTiles());
+        player, LevelController::getInstance()->getCurrentLevel()->getTiles());
 
-    levelController.getCurrentLevel()->Update(deltaTime);
-    levelController.getCurrentLevel()->draw(view.getWindow());
+    LevelController::getInstance()->getCurrentLevel()->Update(deltaTime);
+    LevelController::getInstance()->getCurrentLevel()->draw(view.getWindow());
 
     view.getView().setCenter(132, 100);
     view.getWindow().setView(view.getView());
 
-    //player.getHitBoxSprite().drawHitBox(view.getWindow());
+    // player.getHitBoxSprite().drawHitBox(view.getWindow());
     view.getWindow().draw(player.getHitBoxSprite());
     player.Update(deltaTime);
 

@@ -3,6 +3,6 @@
 
 const void Door::handleCollision(Player &player) {
   if (player.useKey()) {
-    LevelController::goNextLevel(player);
+    LevelController::getInstance()->goNextLevel(player);
   }
 }

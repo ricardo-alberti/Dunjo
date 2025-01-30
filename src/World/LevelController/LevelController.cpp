@@ -3,11 +3,31 @@
 #include "../Levels/Level_1.hpp"
 #include "../Levels/Level_2.hpp"
 #include "../Levels/Level_3.hpp"
+#include <SFML/System/Vector2.hpp>
 #include <memory>
 
-std::map<int, std::shared_ptr<Map>> LevelController::levelOrder;
+LevelController *LevelController::Instance = nullptr;
 
 LevelController::LevelController() { setLevelOrder(); }
+
+LevelController *LevelController::getInstance() {
+  if (Instance == nullptr) {
+    Instance = new LevelController();
+  }
+
+  return Instance;
+}
+
+void LevelController::reset(Player &player) {
+  // levelOrder[currentLevel]->loadTiles();
+  spawnPlayer(player);
+}
+
+void LevelController::spawnPlayer(Player &player) {
+  player.resetToCheckPoint(
+      sf::Vector2f(levelOrder[currentLevel]->getSpawnPoint().x,
+                   levelOrder[currentLevel]->getSpawnPoint().y));
+}
 
 void LevelController::goNextLevel(Player &player) {
   if (currentLevel == levelOrder.size())
@@ -15,10 +35,7 @@ void LevelController::goNextLevel(Player &player) {
 
   currentLevel++;
   levelOrder[currentLevel]->loadTiles();
-
-  player.getHitBoxSprite().setPosition(
-      levelOrder[currentLevel]->getSpawnPoint().x,
-      levelOrder[currentLevel]->getSpawnPoint().y);
+  spawnPlayer(player);
 };
 
 void LevelController::goPreviousLevel(Player &player) {
@@ -27,10 +44,7 @@ void LevelController::goPreviousLevel(Player &player) {
 
   currentLevel--;
   levelOrder[currentLevel]->loadTiles();
-
-  player.getHitBoxSprite().setPosition(
-      levelOrder[currentLevel]->getSpawnPoint().x,
-      levelOrder[currentLevel]->getSpawnPoint().y);
+  spawnPlayer(player);
 };
 
 const std::shared_ptr<Map> LevelController::getCurrentLevel() {
