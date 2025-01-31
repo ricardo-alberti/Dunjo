@@ -11,7 +11,7 @@
 #include <memory>
 
 using func = std::function<void(float)>;
-enum PlayerState { Idle, Running, Jumping, Climbing, Dead };
+enum PlayerState { Idle, Running, Jumping, Dead };
 
 class Player {
 private:

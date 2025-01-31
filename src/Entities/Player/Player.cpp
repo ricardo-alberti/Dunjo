@@ -21,7 +21,10 @@ HitBoxSprite &Player::getHitBoxSprite() { return *hitBoxSprite; }
 void Player::resetVerticalVelocity() { verticalVelocity = 0; }
 void Player::resetHorizontalVelocity() { horizontalVelocity = 0; }
 void Player::increaseScore(int _points) { score += _points; }
-void Player::climb() { setForce(horizontalVelocity, CLIMB_SPEED); }
+void Player::climb() {
+  playerState = PlayerState::Jumping;
+  setForce(horizontalVelocity, CLIMB_SPEED);
+}
 
 void Player::blockPlayerWorldLimit() {
   if (hitBoxSprite->getPosition().x >= WORLD_LIMIT_RIGHT) {
@@ -101,8 +104,10 @@ void Player::jump(float _deltaTime) {
 }
 
 bool Player::goDownSlab() {
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    playerState = PlayerState::Jumping;
     return true;
+  }
 
   return false;
 }
