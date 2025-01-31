@@ -19,7 +19,7 @@ LevelController *LevelController::getInstance() {
 }
 
 void LevelController::reset(Player &player) {
-  // levelOrder[currentLevel]->loadTiles();
+  levelOrder[currentLevel]->loadTiles();
   spawnPlayer(player);
 }
 

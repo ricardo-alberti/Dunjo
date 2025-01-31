@@ -37,6 +37,8 @@ void Player::resetToCheckPoint(sf::Vector2f checkPoint) {
 
   hitBoxSprite->setPosition(checkPoint.x, checkPoint.y);
   playerState = PlayerState::Idle;
+  score = 0;
+  keys = 0;
 }
 
 void Player::Update(float _deltaTime) {
