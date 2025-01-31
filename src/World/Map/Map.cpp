@@ -9,6 +9,11 @@ Map::Map(const std::vector<std::vector<int>> &tileMap)
 }
 
 void Map::loadTiles() {
+  tiles.clear();
+  animatedTiles.clear();
+  magicBricks.clear();
+  levelComputer = nullptr;
+
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
       if (tileMap[i][j] == 0) // empty
