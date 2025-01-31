@@ -2,6 +2,7 @@
 
 **Dunjo** is a 2D dungeon platformer game built using [SFML (Simple and Fast Multimedia Library)](https://www.sfml-dev.org/). It features pixel art sprites designed by [Arks](https://arks.itch.io/dungeon-platform-tileset).
 
+![image](dunjo.png)
 ---
 
 ## Prerequisites
