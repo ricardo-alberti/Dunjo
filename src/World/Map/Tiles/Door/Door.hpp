@@ -7,8 +7,7 @@
 class Door : public Tile {
 private:
   inline static sf::Sprite doorSprite =
-      sf::Sprite(Settings::getInstance()->getTexture(),
-                 sf::IntRect(sf::Vector2(84, 12), sf::Vector2(12, 12)));
+      Settings::getInstance()->getSprite("Door");
 
 public:
   Door(int x, int y)

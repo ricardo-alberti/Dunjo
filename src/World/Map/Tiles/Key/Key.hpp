@@ -6,9 +6,7 @@
 
 class Key : public Tile {
 private:
-  inline static sf::Sprite sprite =
-      sf::Sprite(Settings::getInstance()->getTexture(),
-                 sf::IntRect(sf::Vector2(60, 12), sf::Vector2(12, 12)));
+  inline static sf::Sprite sprite = Settings::getInstance()->getSprite("Key");
 
 public:
   Key(float _x, float _y)

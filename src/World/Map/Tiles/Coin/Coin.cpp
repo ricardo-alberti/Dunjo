@@ -1,4 +1,5 @@
 #include "Coin.hpp"
+#include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -15,6 +16,11 @@ Coin::~Coin() = default;
 void Coin::Update(float deltaTime) { animation->update(deltaTime); }
 
 const void Coin::handleCollision(Player &player) {
-  this->hitBoxSprite->setColor(sf::Color::Black);
-  player.increaseScore(points);
+  static sf::Music music("../assets/music/retro-coin.mp3");
+  if (taken != true) {
+    music.play();
+    this->hitBoxSprite->setColor(sf::Color::Black);
+    player.increaseScore(points);
+    taken = true;
+  }
 }

@@ -18,7 +18,7 @@ void World::display() {
 
   sf::Music music("../assets/music/nice_music.mp3");
   music.setLooping(true);
-  music.play();
+  //music.play();
 
   while (view.isOpen()) {
     deltaTime = clock.restart().asSeconds();

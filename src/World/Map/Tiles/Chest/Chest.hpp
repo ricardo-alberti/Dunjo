@@ -7,8 +7,7 @@
 class Chest : public Tile {
 private:
   inline static sf::Sprite chainSprite =
-      sf::Sprite(Settings::getInstance()->getTexture(),
-                 sf::IntRect(sf::Vector2(36, 12), sf::Vector2(12, 12)));
+      Settings::getInstance()->getSprite("Chest");
 
 public:
   Chest(int x, int y)

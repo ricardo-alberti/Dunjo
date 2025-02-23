@@ -7,8 +7,7 @@
 class Grave : public Tile {
 private:
   inline static sf::Sprite graveSprite =
-      sf::Sprite(Settings::getInstance()->getTexture(),
-                 sf::IntRect(sf::Vector2(48, 12), sf::Vector2(12, 12)));
+      Settings::getInstance()->getSprite("Grave");
 
 public:
   Grave(int x, int y)

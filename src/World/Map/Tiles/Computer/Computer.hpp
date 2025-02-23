@@ -4,7 +4,6 @@
 #include "../../Tiles/MagicBrick/MagicBrick.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <cstdlib>
-#include <iostream>
 #include <memory>
 
 class Computer : public AnimatedTile {
@@ -14,8 +13,7 @@ private:
 
 public:
   inline static sf::Sprite computerSprite =
-      sf::Sprite(Settings::getInstance()->getTexture(),
-                 sf::IntRect(sf::Vector2(60, 48), sf::Vector2(12, 12)));
+      Settings::getInstance()->getSprite("Computer");
 
   Computer(int x, int y, sf::Sprite sprite)
       : AnimatedTile(
