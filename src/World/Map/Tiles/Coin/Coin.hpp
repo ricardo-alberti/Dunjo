@@ -10,8 +10,9 @@ private:
   std::unique_ptr<Animation> animation;
 
 public:
-  inline static sf::Sprite coinSprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(0, 60, 12, 12));
+  inline static sf::Sprite coinSprite =
+      sf::Sprite(Settings::getInstance()->getTexture(),
+                 sf::IntRect(sf::Vector2(0, 60), sf::Vector2(12, 12)));
 
   Coin(int x, int y, sf::Sprite sprite);
   ~Coin();

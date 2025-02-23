@@ -2,8 +2,10 @@
 #include <SFML/Graphics/View.hpp>
 
 View::View(int _x, int _y, const std::string &title)
-    : x(_x), y(_y), window(sf::VideoMode(x, y), title),
-      view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y)) {
+    : x(_x), y(_y), window(sf::VideoMode(sf::Vector2u(x, y)), title),
+      view(
+          sf::FloatRect(sf::Vector2f(0, 0),
+                        sf::Vector2f(window.getSize().x, window.getSize().y))) {
   view.zoom(0.2f);
   window.setView(view);
 }

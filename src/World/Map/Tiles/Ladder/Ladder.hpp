@@ -6,8 +6,9 @@
 
 class Ladder : public Tile {
 private:
-  inline static sf::Sprite ladderSprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(36, 48, 12, 12));
+  inline static sf::Sprite ladderSprite =
+      sf::Sprite(Settings::getInstance()->getTexture(),
+                 sf::IntRect(sf::Vector2(36, 48), sf::Vector2(12, 12)));
 
 public:
   Ladder(int x, int y)

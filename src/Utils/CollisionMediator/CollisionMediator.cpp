@@ -20,26 +20,28 @@ void CollisionMediator::handleDirectionalCollisions(Tile &tile,
   sf::FloatRect playerBounds = player.getHitBoxSprite().getRect();
   sf::FloatRect tileBounds = tile.getHitBoxSprite().getRect();
 
-  if (playerBounds.top + playerBounds.height - COLLISION_MARGIN <=
-      tileBounds.top) {
-    player.blockDownMovement(tileBounds.top - playerBounds.height);
-  }
+  sf::Vector2f playerPos = playerBounds.position;
+  sf::Vector2f playerSize = playerBounds.size;
+  sf::Vector2f tilePos = tileBounds.position;
+  sf::Vector2f tileSize = tileBounds.size;
 
-  else if (playerBounds.top + COLLISION_MARGIN >=
-           tileBounds.top + tileBounds.height) {
-    player.blockUpMovement(tileBounds.top + tileBounds.height);
-  }
+  float playerBottom = playerPos.y + playerSize.y - COLLISION_MARGIN;
+  float playerTop = playerPos.y + COLLISION_MARGIN;
+  float playerRight = playerPos.x + playerSize.x - COLLISION_MARGIN;
+  float playerLeft = playerPos.x - COLLISION_MARGIN;
 
-  else if (playerBounds.left + playerBounds.width - COLLISION_MARGIN >=
-           tileBounds.left) {
-    player.blockRightMovement(tileBounds.left + tileBounds.width +
-                              playerBounds.width / 2 - COLLISION_MARGIN);
-  }
+  float tileBottom = tilePos.y + tileSize.y;
+  float tileRight = tilePos.x + tileSize.x;
 
-  else if (playerBounds.left - COLLISION_MARGIN <=
-           tileBounds.left + tileBounds.width) {
-    player.blockLeftMovement(tileBounds.left - playerBounds.width / 2 -
-                             COLLISION_MARGIN);
+  if (playerBottom <= tilePos.y) {
+    player.blockDownMovement(tilePos.y - playerSize.y);
+  } else if (playerTop >= tileBottom) {
+    player.blockUpMovement(tileBottom);
+  } else if (playerRight >= tilePos.x) {
+    player.blockRightMovement(tilePos.x + tileSize.x + playerSize.x / 2 -
+                              COLLISION_MARGIN);
+  } else if (playerLeft <= tileRight) {
+    player.blockLeftMovement(tilePos.x - playerSize.x / 2 - COLLISION_MARGIN);
   }
 }
 

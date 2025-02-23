@@ -10,8 +10,9 @@ private:
   float timePassed;
 
 public:
-  inline static sf::Sprite fireSprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(36, 24, 12, 12));
+  inline static sf::Sprite fireSprite =
+      sf::Sprite(Settings::getInstance()->getTexture(),
+                 sf::IntRect(sf::Vector2(36, 24), sf::Vector2(12, 12)));
 
   Fire(int x, int y, sf::Sprite sprite);
   ~Fire();

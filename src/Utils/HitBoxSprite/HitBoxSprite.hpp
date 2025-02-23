@@ -15,49 +15,45 @@ private:
 public:
   HitBoxSprite(sf::Sprite &sprite, float x = 0, float y = 0, float width = 12,
                float height = 12, sf::Vector2f offset = {0, 0})
-      : sf::Sprite(sprite), box(x, y, width, height), offset(offset) {}
+      : sf::Sprite(sprite),
+        box(sf::Vector2f(x, y), sf::Vector2f(width, height)), offset(offset) {}
 
   void setPosition(float x, float y) {
-    sf::Sprite::setPosition(x, y);
+    sf::Sprite::setPosition(sf::Vector2f(x, y));
     updateHitBox();
   }
 
   void setOrigin(float x, float y) {
-    sf::Sprite::setOrigin(x, y);
+    sf::Sprite::setOrigin(sf::Vector2f(x, y));
     sf::Vector2f position = getPosition();
-
     origin = {x, y};
 
-    box.left = position.x - origin.x + offset.x;
-    box.top = position.y - origin.y + offset.y;
+    box = sf::FloatRect(position + offset - origin, box.size);
   }
 
   void move(float offsetX, float offsetY) {
-    sf::Sprite::move(offsetX, offsetY);
+    sf::Sprite::move(sf::Vector2f(offsetX, offsetY));
     updateHitBox();
   }
 
   void updateHitBox() {
     sf::Vector2f position = getPosition();
-    box.left = position.x - origin.x + offset.x;
-    box.top = position.y - origin.y + offset.y;
+    box = sf::FloatRect(position + offset - origin, box.size);
   }
 
   bool intersects(const HitBoxSprite &other) const {
-    return box.intersects(other.box);
+    return box.findIntersection(other.box).has_value();
   }
 
   const sf::FloatRect getRect() const { return box; }
-  float getHeight() { return box.height; }
-  float getLeft() {
-    sf::Vector2f position = getPosition();
-    return position.x;
-  }
+  float getHeight() const { return box.size.y; }
+
+  float getLeft() const { return getPosition().x; }
 
   void drawHitBox(sf::RenderWindow &window) const {
     sf::RectangleShape debugBox;
-    debugBox.setPosition(box.left, box.top);
-    debugBox.setSize(sf::Vector2f(box.width, box.height));
+    debugBox.setPosition(box.position);
+    debugBox.setSize(box.size);
     debugBox.setFillColor(sf::Color::Transparent);
     debugBox.setOutlineColor(sf::Color::Red);
     debugBox.setOutlineThickness(1);

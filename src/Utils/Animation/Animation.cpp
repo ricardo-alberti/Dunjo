@@ -7,8 +7,9 @@ Animation::Animation(std::shared_ptr<HitBoxSprite> _sprite, int initialFrame_X,
       initialFrame_Y(initialFrame_Y), frameTime(_frameTime), currentFrame(0),
       elapsedTime(0.0f) {
   for (int i = 0; i < _numFrames; ++i) {
-    frames.emplace_back(initialFrame_X + i * frameWidth, initialFrame_Y,
-                        frameWidth, frameHeight);
+    frames.emplace_back(
+        sf::Vector2<int>(initialFrame_X + i * frameWidth, initialFrame_Y),
+        sf::Vector2<int>(frameWidth, frameHeight));
   }
 }
 
@@ -22,7 +23,4 @@ const void Animation::update(float deltaTime) {
   }
 }
 
-const void Animation::reset()
-{
-    currentFrame = 0;
-}
+const void Animation::reset() { currentFrame = 0; }

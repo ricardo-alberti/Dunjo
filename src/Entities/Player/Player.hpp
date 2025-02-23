@@ -15,8 +15,9 @@ enum PlayerState { Idle, Running, Jumping, Dead };
 
 class Player {
 private:
-  inline static sf::Sprite sprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(36, 0, 12, 12));
+  inline static sf::Sprite sprite =
+      sf::Sprite(Settings::getInstance()->getTexture(),
+                 sf::IntRect(sf::Vector2(36, 0), sf::Vector2(12, 12)));
 
   std::shared_ptr<HitBoxSprite> hitBoxSprite =
       std::make_shared<HitBoxSprite>(sprite, 0, 0, 8, 10, sf::Vector2f(3, 0));

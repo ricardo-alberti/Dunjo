@@ -3,8 +3,6 @@ project(Dunjo)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(SFML 2.5 REQUIRED graphics window system)
-
 set(SOURCES
     src/View/View.cpp
     src/Entities/Player/Player.cpp

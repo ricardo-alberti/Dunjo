@@ -25,8 +25,13 @@ public:
     sf::FloatRect playerBounds = player.getHitBoxSprite().getRect();
     sf::FloatRect tileBounds = this->getHitBoxSprite().getRect();
 
-    if (playerBounds.top + playerBounds.height - COLLISION_MARGIN <=
-        tileBounds.top) {
+    sf::Vector2f playerPosition = playerBounds.position;
+    sf::Vector2f playerSize = playerBounds.size;
+
+    sf::Vector2f tilePosition = tileBounds.position;
+    sf::Vector2f tileSize = tileBounds.size;
+
+    if (playerPosition.y + playerSize.y - COLLISION_MARGIN <= tilePosition.y) {
       onPlayerTop();
     } else {
       onPlayerBottom();

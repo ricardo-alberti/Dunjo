@@ -5,16 +5,36 @@
 #include <memory>
 
 namespace BrickSprites {
-    sf::Sprite Middle            = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(12, 12, 12, 12));
-    sf::Sprite TopMiddle         = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(12, 0, 12, 12));
-    sf::Sprite TopLeftCorner     = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(0, 0, 12, 12));
-    sf::Sprite TopRightCorner    = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(24, 0, 12, 12));
-    sf::Sprite BottomMiddle      = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(12, 24, 12, 12));
-    sf::Sprite BottomLeftCorner  = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(0, 24, 12, 12));
-    sf::Sprite BottomRightCorner = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(24, 24, 12, 12));
-    sf::Sprite RightWall         = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(24, 12, 12, 12));
-    sf::Sprite LeftWall          = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(0, 12, 12, 12));
-    sf::Sprite Slab              = sf::Sprite(Settings::getInstance()->getTexture(), sf::IntRect(24, 48, 12, 12));
+sf::Sprite Middle =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(12, 12), sf::Vector2(12, 12)));
+sf::Sprite TopMiddle =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(12, 0), sf::Vector2(12, 12)));
+sf::Sprite TopLeftCorner =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(0, 0), sf::Vector2(12, 12)));
+sf::Sprite TopRightCorner =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(24, 0), sf::Vector2(12, 12)));
+sf::Sprite BottomMiddle =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(12, 24), sf::Vector2(12, 12)));
+sf::Sprite BottomLeftCorner =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(0, 24), sf::Vector2(12, 12)));
+sf::Sprite BottomRightCorner =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(24, 24), sf::Vector2(12, 12)));
+sf::Sprite RightWall =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(24, 12), sf::Vector2(12, 12)));
+sf::Sprite LeftWall =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(0, 12), sf::Vector2(12, 12)));
+sf::Sprite Slab =
+    sf::Sprite(Settings::getInstance()->getTexture(),
+               sf::IntRect(sf::Vector2(24, 48), sf::Vector2(12, 12)));
 } // namespace BrickSprites
 
 std::shared_ptr<Tile> BrickFactory::createTile(TileType tileType, float x,

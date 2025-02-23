@@ -16,17 +16,15 @@ void World::display() {
 
   sf::Clock clock;
 
-  sf::Music music;
-  music.openFromFile("../assets/music/nice_music.mp3");
-  music.setLoop(true);
-  // music.play();
+  sf::Music music("../assets/music/nice_music.mp3");
+  music.setLooping(true);
+  music.play();
 
   while (view.isOpen()) {
     deltaTime = clock.restart().asSeconds();
 
-    sf::Event event;
-    while (view.getWindow().pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
+    while (const std::optional event = view.getWindow().pollEvent()) {
+      if (event->is<sf::Event::Closed>())
         view.getWindow().close();
     }
 
@@ -38,7 +36,7 @@ void World::display() {
     LevelController::getInstance()->getCurrentLevel()->Update(deltaTime);
     LevelController::getInstance()->getCurrentLevel()->draw(view.getWindow());
 
-    view.getView().setCenter(132, 100);
+    view.getView().setCenter({132, 100});
     view.getWindow().setView(view.getView());
 
     // player.getHitBoxSprite().drawHitBox(view.getWindow());

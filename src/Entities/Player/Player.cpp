@@ -68,11 +68,11 @@ void Player::Update(float _deltaTime) {
     playerState = PlayerState::Idle;
 
   // input
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     moveLeft(_deltaTime);
-  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
     moveRight(_deltaTime);
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && onGround)
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
     jump(_deltaTime);
 }
 
@@ -81,7 +81,7 @@ void Player::moveRight(float _deltaTime) {
     playerState = PlayerState::Running;
 
   horizontalVelocity += MOVEMENT_SPEED * _deltaTime;
-  hitBoxSprite->setScale(SCALE_X, SCALE_Y);
+  hitBoxSprite->setScale(sf::Vector2(SCALE_X, SCALE_Y));
 }
 
 void Player::moveLeft(float _deltaTime) {
@@ -89,7 +89,7 @@ void Player::moveLeft(float _deltaTime) {
     playerState = PlayerState::Running;
 
   horizontalVelocity -= MOVEMENT_SPEED * _deltaTime;
-  hitBoxSprite->setScale(-SCALE_X, SCALE_Y);
+  hitBoxSprite->setScale(sf::Vector2(-SCALE_X, SCALE_Y));
 }
 
 void Player::jump(float _deltaTime) {
@@ -104,7 +104,7 @@ void Player::jump(float _deltaTime) {
 }
 
 bool Player::goDownSlab() {
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
     playerState = PlayerState::Jumping;
     return true;
   }

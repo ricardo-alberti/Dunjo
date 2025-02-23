@@ -13,8 +13,9 @@ private:
   std::vector<std::shared_ptr<MagicBrick>> observers;
 
 public:
-  inline static sf::Sprite computerSprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(60, 48, 12, 12));
+  inline static sf::Sprite computerSprite =
+      sf::Sprite(Settings::getInstance()->getTexture(),
+                 sf::IntRect(sf::Vector2(60, 48), sf::Vector2(12, 12)));
 
   Computer(int x, int y, sf::Sprite sprite)
       : AnimatedTile(

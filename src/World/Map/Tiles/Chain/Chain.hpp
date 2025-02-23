@@ -6,8 +6,9 @@
 
 class Chain : public Tile {
 private:
-  inline static sf::Sprite chainSprite = sf::Sprite(
-      Settings::getInstance()->getTexture(), sf::IntRect(84, 24, 12, 12));
+  inline static sf::Sprite chainSprite =
+      sf::Sprite(Settings::getInstance()->getTexture(),
+                 sf::IntRect(sf::Vector2(84, 24), sf::Vector2(12, 12)));
 
 public:
   Chain(int x, int y)
