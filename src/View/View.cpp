@@ -1,4 +1,4 @@
-#include "View.hpp"
+#include "View/View.hpp"
 #include <SFML/Graphics/View.hpp>
 
 View::View(int _x, int _y, const std::string &title)

@@ -1,4 +1,6 @@
-#include "Player.hpp"
+#include "Player/Player.hpp"
+#include "Utils/SoundManager.hpp"
+#include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -8,10 +10,10 @@ constexpr float WORLD_LIMIT_RIGHT = 22 * 12;
 constexpr float IDLE_SPEED = 30.0;
 constexpr float JUMP_FORCE = -300.f;
 constexpr float JUMP_COOLDOWN = 0.07f;
-constexpr float MOVEMENT_SPEED = 800.0f;
-constexpr float CLIMB_SPEED = -250.0f;
+constexpr float MOVEMENT_SPEED = 1000.0f;
+constexpr float CLIMB_SPEED = -50.0f;
 constexpr float HORIZONTAL_RESISTANCE = 8.0f;
-constexpr float GRAVITY = 1900.0f;
+constexpr float GRAVITY = 1500.0f;
 constexpr float SCALE_X = 1.0f;
 constexpr float SCALE_Y = 1.0f;
 
@@ -22,7 +24,7 @@ void Player::resetVerticalVelocity() { verticalVelocity = 0; }
 void Player::resetHorizontalVelocity() { horizontalVelocity = 0; }
 void Player::increaseScore(int _points) { score += _points; }
 void Player::climb() {
-  playerState = PlayerState::Jumping;
+  playerState = PlayerState::Climbing;
   setForce(horizontalVelocity, CLIMB_SPEED);
 }
 
@@ -54,15 +56,12 @@ void Player::Update(float _deltaTime) {
 
   blockPlayerWorldLimit();
 
-  hitBoxSprite->move(horizontalVelocity * _deltaTime,
-                     verticalVelocity * _deltaTime);
-  verticalVelocity += GRAVITY * _deltaTime;
-  horizontalVelocity -= horizontalVelocity * HORIZONTAL_RESISTANCE * _deltaTime;
-
   if (playerState == PlayerState::Dead)
     return;
+  else if (playerState == PlayerState::Climbing) {
+    blockDownMovement(hitBoxSprite->getPosition().y);
+  }
 
-  // set state if idle
   if (horizontalVelocity <= IDLE_SPEED && horizontalVelocity >= -IDLE_SPEED &&
       onGround)
     playerState = PlayerState::Idle;
@@ -74,6 +73,12 @@ void Player::Update(float _deltaTime) {
     moveRight(_deltaTime);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
     jump(_deltaTime);
+
+  verticalVelocity += GRAVITY * _deltaTime;
+  horizontalVelocity -= horizontalVelocity * HORIZONTAL_RESISTANCE * _deltaTime;
+
+  hitBoxSprite->move(horizontalVelocity * _deltaTime,
+                     verticalVelocity * _deltaTime);
 }
 
 void Player::moveRight(float _deltaTime) {
@@ -96,6 +101,7 @@ void Player::jump(float _deltaTime) {
   jumpCooldownPassed += _deltaTime;
 
   if (jumpCooldownPassed >= JUMP_COOLDOWN) {
+    SoundManager::getInstance().play("jump");
     verticalVelocity = JUMP_FORCE;
     playerState = PlayerState::Jumping;
     jumpCooldownPassed = 0.0f;
@@ -134,6 +140,11 @@ void Player::takeDamage() {
 void Player::setForce(float _horizontalForce, float _verticalForce) {
   verticalVelocity = _verticalForce;
   horizontalVelocity = _horizontalForce;
+}
+
+void Player::addForce(float _horizontalForce, float _verticalForce) {
+  verticalVelocity += _verticalForce;
+  horizontalVelocity += _horizontalForce;
 }
 
 void Player::blockUpMovement(float y) {

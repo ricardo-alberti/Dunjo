@@ -1,4 +1,4 @@
-#include "Animation.hpp"
+#include "Utils/Animation.hpp"
 #include <memory>
 
 Animation::Animation(std::shared_ptr<HitBoxSprite> _sprite, int initialFrame_X,

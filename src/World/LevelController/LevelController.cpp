@@ -1,8 +1,8 @@
-#include "../LevelController/LevelController.hpp"
-#include "../../Entities/Player/Player.hpp"
-#include "../Levels/Level_1.hpp"
-#include "../Levels/Level_2.hpp"
-#include "../Levels/Level_3.hpp"
+#include "Utils/LevelController.hpp"
+#include "Levels/Level_1.hpp"
+#include "Levels/Level_2.hpp"
+#include "Levels/Level_3.hpp"
+#include "Player/Player.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <memory>
 
@@ -31,7 +31,7 @@ void LevelController::spawnPlayer(Player &player) {
 
 void LevelController::goNextLevel(Player &player) {
   if (currentLevel == levelOrder.size())
-    return;
+    currentLevel = 0;
 
   currentLevel++;
   levelOrder[currentLevel]->loadTiles();

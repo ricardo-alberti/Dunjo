@@ -1,4 +1,4 @@
-#include "CollisionMediator.hpp"
+#include "Utils/CollisionMediator.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -8,10 +8,11 @@ void CollisionMediator::checkCollisions(
     if (!tile->getHitBoxSprite().intersects(player.getHitBoxSprite()))
       continue;
 
+    tile->handleCollision(player);
+    tile->handleInteraction(player);
+
     if (tile->isCollidable())
       handleDirectionalCollisions(*tile, player);
-
-    tile->handleCollision(player);
   }
 }
 

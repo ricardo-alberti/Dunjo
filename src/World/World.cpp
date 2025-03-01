@@ -1,10 +1,10 @@
-#include "World.hpp"
-#include <SFML/Audio/Music.hpp>
+#include "World/World.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <memory>
+#include "Utils/MusicManager.hpp"
 
 World::World(View &_view, Player &_player, LevelController &_levelController)
     : view(_view), player(_player), levelController(_levelController) {
@@ -16,9 +16,7 @@ void World::display() {
 
   sf::Clock clock;
 
-  sf::Music music("../assets/music/nice_music.mp3");
-  music.setLooping(true);
-  //music.play();
+  MusicManager::getInstance().play("background");
 
   while (view.isOpen()) {
     deltaTime = clock.restart().asSeconds();

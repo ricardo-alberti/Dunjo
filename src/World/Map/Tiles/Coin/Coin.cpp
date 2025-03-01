@@ -1,7 +1,8 @@
-#include "Coin.hpp"
-#include <SFML/Audio/Music.hpp>
+#include "Tiles/Coin.hpp"
+#include "Utils/SoundManager.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Angle.hpp>
 #include <SFML/System/Vector2.hpp>
 
 Coin::Coin(int _x, int _y, sf::Sprite _sprite)
@@ -13,13 +14,17 @@ Coin::Coin(int _x, int _y, sf::Sprite _sprite)
 
 Coin::~Coin() = default;
 
-void Coin::Update(float deltaTime) { animation->update(deltaTime); }
+void Coin::Update(float deltaTime) {
+  animation->update(deltaTime);
+  if (taken) {
+    this->hitBoxSprite->rotate(sf::degrees(0.1));
+    this->hitBoxSprite->move(0, -0.1);
+  }
+}
 
 const void Coin::handleCollision(Player &player) {
-  static sf::Music music("../assets/music/retro-coin.mp3");
   if (taken != true) {
-    music.play();
-    this->hitBoxSprite->setColor(sf::Color::Black);
+    SoundManager::getInstance().play("coin");
     player.increaseScore(points);
     taken = true;
   }

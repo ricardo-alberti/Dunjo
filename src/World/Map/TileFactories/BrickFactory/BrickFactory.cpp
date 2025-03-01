@@ -1,7 +1,7 @@
-#include "BrickFactory.hpp"
-#include "../../Tiles/Brick/Brick.hpp"
-#include "../../Tiles/BrickSlab/BrickSlab.hpp"
-#include "../../Tiles/MagicBrick/MagicBrick.hpp"
+#include "Factories/BrickFactory.hpp"
+#include "Tiles/Brick.hpp"
+#include "Tiles/BrickSlab.hpp"
+#include "Tiles/MagicBrick.hpp"
 #include <memory>
 
 std::shared_ptr<Tile> BrickFactory::createTile(TileType tileType, float x,

@@ -1,4 +1,4 @@
-#include "Brick.hpp"
+#include "Tiles/Brick.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 

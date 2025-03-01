@@ -1,4 +1,4 @@
-#include "Settings.hpp"
+#include "Utils/Settings.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <stdexcept>
 #include <unordered_map>
@@ -21,7 +21,7 @@ Settings::Settings() {
       {"Chest", sf::IntRect({36, 12}, {12, 12})},
       {"Coin", sf::IntRect({0, 60}, {12, 12})},
       {"Computer", sf::IntRect({60, 48}, {12, 12})},
-      {"Door", sf::IntRect({84, 12}, {12, 12})},
+      {"Door", sf::IntRect({72, 12}, {12, 12})},
       {"Fire", sf::IntRect({36, 24}, {12, 12})},
       {"Grave", sf::IntRect({48, 12}, {12, 12})},
       {"Key", sf::IntRect({60, 12}, {12, 12})},
@@ -32,8 +32,7 @@ Settings::Settings() {
       {"BottomMiddle", sf::IntRect({12, 24}, {12, 12})},
       {"BottomLeftCorner", sf::IntRect({0, 24}, {12, 12})},
       {"BottomRightCorner", sf::IntRect({24, 24}, {12, 12})},
-      {"RightWall", sf::IntRect({24, 12}, {12, 12})}
-  };
+      {"RightWall", sf::IntRect({24, 12}, {12, 12})}};
 
   for (const auto &sprite : spriteData) {
     spritesMap.emplace(sprite.first, sf::Sprite(texture, sprite.second));

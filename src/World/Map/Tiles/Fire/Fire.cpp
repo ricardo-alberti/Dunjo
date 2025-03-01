@@ -1,5 +1,5 @@
-#include "Fire.hpp"
-#include "../../../LevelController/LevelController.hpp"
+#include "Tiles/Fire.hpp"
+#include "Utils/LevelController.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <random>

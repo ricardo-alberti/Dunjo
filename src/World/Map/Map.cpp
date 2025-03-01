@@ -1,5 +1,5 @@
-#include "Map.hpp"
-#include "Tiles/MagicBrick/MagicBrick.hpp"
+#include "World/Map.hpp"
+#include "Tiles/MagicBrick.hpp"
 
 Map::Map(const std::vector<std::vector<int>> &tileMap)
     : tileMap(tileMap), factory(CentralTileFactory()) {
@@ -64,7 +64,7 @@ void Map::draw(sf::RenderWindow &window) {
 }
 
 void Map::Update(float deltaTime) {
-  for (const auto &tile : animatedTiles) {
+  for (const auto &tile : tiles) {
     tile->Update(deltaTime);
   }
 }
