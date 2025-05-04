@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Player/Player.hpp"
+#include "Entities/Player.hpp"
 #include "Tiles/Tile.hpp"
 #include <memory>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "World/Map.hpp"
+#include "Map/Map.hpp"
 #include <map>
 #include <memory>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AnimatedTile.hpp"
-#include "MagicBrick.hpp"
+#include "Tiles/MagicBrick.hpp"
 #include "Utils/SoundManager.hpp"
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -12,7 +12,7 @@
 class Computer : public AnimatedTile {
 private:
   std::unique_ptr<Animation> animation;
-  std::vector<std::shared_ptr<MagicBrick>> observers;
+  std::vector<std::shared_ptr<class MagicBrick>> observers;
   bool activated = false;
 
 public:
@@ -31,7 +31,7 @@ public:
 
   const void handleInteraction(Player &player) override {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) {
-      if (activated != true) {
+      if (!activated) {
         SoundManager::getInstance().play("computer");
         hitBoxSprite->setColor(sf::Color::Cyan);
         activated = true;
@@ -40,7 +40,7 @@ public:
     }
   }
 
-  const void AddObserver(std::shared_ptr<MagicBrick> _tile) {
+  const void AddObserver(std::shared_ptr<class MagicBrick> _tile) {
     observers.emplace_back(_tile);
   };
 

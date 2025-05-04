@@ -19,6 +19,7 @@ private:
     soundPaths["computer"] = "../assets/sound/computer.wav";
     soundPaths["slime"] = "../assets/sound/slime.wav";
     soundPaths["door"] = "../assets/sound/door.wav";
+    soundPaths["dead"] = "../assets/sound/dead.wav";
 
     soundVolumes["jump"] = 0.5f;
     soundVolumes["door"] = 100.0f;

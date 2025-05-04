@@ -1,6 +1,6 @@
 #pragma once
 
-#include "World/Map.hpp"
+#include "Map/Map.hpp"
 
 class Level_2 : public Map {
 private:

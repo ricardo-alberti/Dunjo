@@ -1,4 +1,4 @@
-#include "World/Map.hpp"
+#include "Map/Map.hpp"
 #include "Tiles/MagicBrick.hpp"
 
 Map::Map(const std::vector<std::vector<int>> &tileMap)
@@ -16,10 +16,10 @@ void Map::loadTiles() {
 
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      if (tileMap[i][j] == 0) // empty
+      if (tileMap[i][j] == 0)
         continue;
 
-      if (tileMap[i][j] == 99) // player spawn point
+      if (tileMap[i][j] == 99)
       {
         spawnPoint = {12.0f * j, 12.0f * i};
         continue;

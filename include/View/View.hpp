@@ -8,6 +8,7 @@ private:
   int y;
   sf::RenderWindow window;
   sf::View view;
+  sf::View viewText;
 
 public:
   View(int _x = 1366, int _y = 768, const std::string &title = "Dunjo");
@@ -16,4 +17,5 @@ public:
   bool isOpen() const;
   sf::RenderWindow &getWindow();
   sf::View &getView();
+  sf::View &getViewText();
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Player/Player.hpp"
+#include "Entities/Player.hpp"
 #include "Utils/CollisionMediator.hpp"
 #include "Utils/LevelController.hpp"
 #include "View/View.hpp"

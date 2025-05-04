@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Player/Player.hpp"
+#include "Entities/Player.hpp"
 #include "Utils/HitBoxSprite.hpp"
 #include "Utils/Settings.hpp"
 #include <SFML/Graphics.hpp>

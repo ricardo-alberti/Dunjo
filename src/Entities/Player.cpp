@@ -1,4 +1,5 @@
-#include "Player/Player.hpp"
+#include "Entities/Player.hpp"
+#include "Utils/LevelController.hpp"
 #include "Utils/SoundManager.hpp"
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -17,7 +18,25 @@ constexpr float GRAVITY = 1500.0f;
 constexpr float SCALE_X = 1.0f;
 constexpr float SCALE_Y = 1.0f;
 
-Player::Player() { hitBoxSprite->setOrigin(6, 0); }
+Player::Player() {
+  hitBoxSprite =
+      std::make_shared<HitBoxSprite>(sprite, 0, 0, 8, 10, sf::Vector2f(3, 0));
+  hitBoxSprite->setOrigin(6, 0);
+  playerState = PlayerState::Idle;
+  lastState = PlayerState::Idle;
+  onGround = false;
+
+  animationsMap.emplace(PlayerState::Idle,
+                        Animation(hitBoxSprite, 36, 0, 0, 1));
+  animationsMap.emplace(PlayerState::Jumping,
+                        Animation(hitBoxSprite, 48, 0, 0, 1));
+  animationsMap.emplace(PlayerState::Climbing,
+                        Animation(hitBoxSprite, 60, 0, 0.2f, 2));
+  animationsMap.emplace(PlayerState::Dead,
+                        Animation(hitBoxSprite, 84, 0, 0.2f, 1));
+  animationsMap.emplace(PlayerState::Running,
+                        Animation(hitBoxSprite, 36, 0, 0.065f, 4));
+}
 
 HitBoxSprite &Player::getHitBoxSprite() { return *hitBoxSprite; }
 void Player::resetVerticalVelocity() { verticalVelocity = 0; }
@@ -26,6 +45,14 @@ void Player::increaseScore(int _points) { score += _points; }
 void Player::climb() {
   playerState = PlayerState::Climbing;
   setForce(horizontalVelocity, CLIMB_SPEED);
+}
+
+void Player::updateVelocity(float _deltaTime) {
+  verticalVelocity += GRAVITY * _deltaTime;
+  horizontalVelocity -= horizontalVelocity * HORIZONTAL_RESISTANCE * _deltaTime;
+
+  hitBoxSprite->move(horizontalVelocity * _deltaTime,
+                     verticalVelocity * _deltaTime);
 }
 
 void Player::blockPlayerWorldLimit() {
@@ -49,22 +76,28 @@ void Player::resetToCheckPoint(sf::Vector2f checkPoint) {
 void Player::Update(float _deltaTime) {
   if (lastState != playerState) {
     lastState = playerState;
-    animations.at(playerState).reset();
+    animationsMap.at(playerState).reset();
   }
 
-  animations.at(playerState).update(_deltaTime);
+  animationsMap.at(playerState).update(_deltaTime);
 
   blockPlayerWorldLimit();
+  updateVelocity(_deltaTime);
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) {
+    LevelController::getInstance()->reset(*this);
+  }
 
   if (playerState == PlayerState::Dead)
     return;
-  else if (playerState == PlayerState::Climbing) {
-    blockDownMovement(hitBoxSprite->getPosition().y);
-  }
 
   if (horizontalVelocity <= IDLE_SPEED && horizontalVelocity >= -IDLE_SPEED &&
       onGround)
     playerState = PlayerState::Idle;
+
+  if (playerState == PlayerState::Climbing) {
+    blockDownMovement(hitBoxSprite->getPosition().y);
+  }
 
   // input
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
@@ -73,12 +106,6 @@ void Player::Update(float _deltaTime) {
     moveRight(_deltaTime);
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && onGround)
     jump(_deltaTime);
-
-  verticalVelocity += GRAVITY * _deltaTime;
-  horizontalVelocity -= horizontalVelocity * HORIZONTAL_RESISTANCE * _deltaTime;
-
-  hitBoxSprite->move(horizontalVelocity * _deltaTime,
-                     verticalVelocity * _deltaTime);
 }
 
 void Player::moveRight(float _deltaTime) {
@@ -133,6 +160,7 @@ void Player::takeDamage() {
   if (playerState == PlayerState::Dead)
     return;
 
+  SoundManager::getInstance().play("dead");
   setForce(-horizontalVelocity, JUMP_FORCE);
   playerState = PlayerState::Dead;
 }

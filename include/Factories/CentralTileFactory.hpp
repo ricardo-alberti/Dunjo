@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Factories/BrickFactory.hpp"
 #include "Tiles/Chain.hpp"
 #include "Tiles/Chest.hpp"
 #include "Tiles/Coin.hpp"
@@ -10,7 +11,6 @@
 #include "Tiles/Key.hpp"
 #include "Tiles/Ladder.hpp"
 #include "Tiles/SlimeBlock.hpp"
-#include "Factories/BrickFactory.hpp"
 #include <memory>
 
 class CentralTileFactory {

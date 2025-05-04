@@ -2,7 +2,7 @@
 #include "Levels/Level_1.hpp"
 #include "Levels/Level_2.hpp"
 #include "Levels/Level_3.hpp"
-#include "Player/Player.hpp"
+#include "Entities/Player.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <memory>
 
