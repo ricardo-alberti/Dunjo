@@ -4,23 +4,23 @@ project(Dunjo)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 set(SOURCES
     src/View/View.cpp
-    src/Entities/Player/Player.cpp
-    src/Utils/CollisionMediator/CollisionMediator.cpp
+    src/Entities/Player.cpp
     src/World/World.cpp
-    src/Utils/Animation/Animation.cpp
-    src/World/LevelController/LevelController.cpp
-    src/World/Map/Tiles/Fire/Fire.cpp
-    src/World/Map/Tiles/Door/Door.cpp
-    src/World/Map/Tiles/Brick/Brick.cpp
-    src/World/Map/Tiles/Coin/Coin.cpp
-    src/World/Map/TileFactories/BrickFactory/BrickFactory.cpp
-    src/World/Map/Tiles/Tile.cpp
-    src/World/Map/Map.cpp
-    src/Settings/Settings.cpp
+    src/Utils/Settings.cpp
+    src/Utils/CollisionMediator.cpp
+    src/Utils/Animation.cpp
+    src/Utils/LevelController.cpp
+    src/Tiles/Fire.cpp
+    src/Tiles/Door.cpp
+    src/Tiles/Brick.cpp
+    src/Tiles/Coin.cpp
+    src/Tiles/Tile.cpp
+    src/Factories/BrickFactory.cpp
+    src/Map/Map.cpp
     src/main.cpp
 )
 

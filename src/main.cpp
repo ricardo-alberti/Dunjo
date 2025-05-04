@@ -1,11 +1,12 @@
 #include "World/World.hpp"
 
 int main() {
-  Player player = Player();
-  View view = View();
-  LevelController levelController = LevelController();
+  Player player;
+  View view;
+  LevelController levelController; 
 
   World world = World(view, player, levelController);
+
   world.display();
 
   return 0;
