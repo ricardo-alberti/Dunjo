@@ -11,7 +11,7 @@ Before building **Dunjo**, ensure your environment has:
 
 - A **C++ compiler** supporting C++17 or later.
 - **CMake** (version 3.10 or higher).
-- **SFML** (version 2.5 or higher).  
+- **SFML** (version 3.0 or higher).  
 
 To install SFML, refer to the [official SFML installation guide](https://www.sfml-dev.org/tutorials/2.5/).
 
